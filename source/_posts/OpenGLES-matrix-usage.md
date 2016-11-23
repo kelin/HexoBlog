@@ -19,7 +19,7 @@ $$
 
 ***
 # 模型矩阵
-
+模型矩阵是相对于世界坐标系的，包含一系列平移、缩放、旋转的变换信息的矩阵。它与点的位置没有任何关系。基本的模型矩阵有平移矩阵、缩放矩阵、旋转矩阵，模型矩阵左乘模型矩阵，还是模型矩阵。点坐标左乘模型矩阵就能得到最终变换的坐标。因此，多个顶点能共用同一个模型矩阵，一般一个模型里的所有顶点都共用一个模型矩阵。
 ## 平移矩阵
 $$
  \left[
@@ -62,36 +62,54 @@ $$
 
 ## 缩放矩阵
 $$
-\begin{bmatrix}x'\\\\ y'\\\\ z'\end{bmatrix}
-=
-\begin{bmatrix}s_{x} & 0 & 0\\\\ 0 & s_{y} & 0\\\\ 0 & 0 & s_{z} \end{bmatrix}
-\begin{bmatrix}x\\\\ y\\\\ z\end{bmatrix}
+\begin{bmatrix}
+    S_x & 0 & 0 & 0 \\\\
+    0 & S_y & 0 & 0 \\\\
+    0 & 0 & S_z & 0 \\\\
+    0 & 0 & 0 & 1
+\end{bmatrix}
 $$
 
 ## 旋转矩阵
-旋转变换有一些复杂，先看在二维平面上的旋转变换：
-很容易得到：
-
-$$\begin{matrix}x'=x\cos\theta-y\sin\theta\\y'=x\sin\theta+y\sin\theta\end{matrix}$$
-
-矩阵形式的表达更加简洁，后面大多使用这种形式：
-
-$$\begin{bmatrix}x'\\ y'\end{bmatrix}=\begin{bmatrix}\cos\theta & -\sin\theta\\ \sin\theta & \cos\theta\end{bmatrix}\begin{bmatrix}x\\ y\end{bmatrix}$$
 点绕z轴旋转：
-
-$$\begin{bmatrix}x'\\ y'\\ z'\end{bmatrix}=\begin{bmatrix}\cos\theta & -\sin\theta & 0\\ \sin\theta & \cos\theta & 0\\ 0 & 0 & 1\end{bmatrix}\begin{bmatrix}x\\ y\\ z\end{bmatrix}$$
+$$
+\begin{bmatrix}
+    \cos\theta & -\sin\theta & 0 & 0 \\\\
+    \sin\theta & \cos\theta & 0 & 0 \\\\
+    0 & 0 & 1 & 0 \\\\
+    0 & 0 & 0 & 1
+\end{bmatrix}
+$$
 
 点绕x轴旋转：
-
-$$\begin{bmatrix}x'\\ y'\\ z'\end{bmatrix}=\begin{bmatrix}1 & 0 & 0\\ 0 & \cos\theta & -\sin\theta\\ 0 & \sin\theta & \cos\theta\end{bmatrix}\begin{bmatrix}x\\ y\\ z\end{bmatrix}$$
+$$\begin{bmatrix}
+    1 & 0 & 0 & 0 \\\\ 
+    0 & \cos\theta & -\sin\theta & 0 \\\\ 
+    0 & \sin\theta & \cos\theta & 0 \\\\
+    0 & 0 & 0 & 1
+\end{bmatrix}$$
 
 点绕y轴旋转：
-
-$$\begin{bmatrix}x'\\ y'\\ z'\end{bmatrix}=\begin{bmatrix}\cos\theta & 0 & -\sin\theta\\ 0 & 1 & 0\\ \sin\theta & 0 & \cos\theta\end{bmatrix}\begin{bmatrix}x\\ y\\ z\end{bmatrix}$$
+$$\begin{bmatrix}
+    \cos\theta & 0 & -\sin\theta & 0\\\\
+    0 & 1 & 0 & 0\\\\
+    \sin\theta & 0 & \cos\theta & 0 \\\\
+    0 & 0 & 0 & 1
+\end{bmatrix}$$
 
 ***
+# 视图矩阵
+概念：视图矩阵是本地坐标系在世界坐标系中的变换的模型矩阵的逆矩阵，因此视图矩阵也是可以分为平移、缩放、旋转的。
+好吧，说点人话，一个摄像机，在世界坐标系中，经过模型矩阵*M1*（模型变换），从原点沿着X轴正方向前进10单位。这时候，摄像机的视图矩阵为*M2*，而且*M2*是*M1*的逆矩阵。*M2*的几何含义：假设摄像机一直原地不动，而是这个世界以*M2*为模型矩阵进行变换，往后移动了10个单位，也就是摄像机在世界坐标系下的平移、缩放、旋转等变换的反向过程。
+作用：获得相对坐标（本地坐标）。
+将视图矩阵左乘一个物体最终的模型矩阵，得到的矩阵就是所谓的“模型视图矩阵”。“模型视图矩阵”左乘一个世界坐标系下的坐标点，得到的是相对于本地坐标系的坐标点。
+举个例子：一个摄像机和一个物体，一起同样的速度和方向，从世界坐标系的原点沿着X轴的正方形移动了10个单位。摄像机的视图矩阵左乘物体的模型矩阵（模型视图矩阵）表示的含义可以理解为：世界往X轴的负方向移动了10个单位，然后在沿x轴正方向移动10个单位，因此任何一个坐标点乘以这个模型视图矩阵，都不会发生变化，明显，摄像机和物体相对静止的。
 
-# 正交投影矩阵
+
+***
+# 投影矩阵
+投影矩阵就是把三维空间投影到二维的空间。方式有正交和透视两种。
+## 正交投影矩阵
 - 作用：正交投影矩阵可以把虚拟坐标转换回归一化设备坐标（正交投影矩阵乘以虚拟坐标）。
 - 归一化设备坐标：在OpenGL里，一切物体都要映射到X、Y轴和Z轴的[-1,1]范围内，这个范围内的坐标被称为归一化设备坐标，其独立于屏幕实际的尺寸。归一化设备坐标假定坐标空间是个正方形。
 - 虚拟坐标空间：为了让屏幕形状考虑进来，把宽和高中较小的一个的范围定在[-1,1]内，另外一个根据屏幕尺寸比例调整为较大的范围。
@@ -111,7 +129,7 @@ $$
 其实在一个顶点着色器的顶点位置(gl_Position)变为归一化设备坐标前，还会做透视除法（xyz都除以w）。
 
 ***
-# 透视投影矩阵
+## 透视投影矩阵
 透视投影矩阵最大的作用是产生正确的w值。w值可以理解为距离，w值越大，离中心点越近。
 
 透视投影矩阵
@@ -132,3 +150,6 @@ width:屏幕宽度
 height:屏幕高度
 far: 到远处平面的距离（>0 && > near）
 near: 到近处平面的距离（>0）
+
+# 从虚拟世界到画在屏幕上经过的变换过程
+
