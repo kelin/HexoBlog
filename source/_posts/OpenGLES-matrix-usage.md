@@ -17,7 +17,10 @@ $$
   \right]
 $$
 
-# 平移矩阵
+***
+# 模型矩阵
+
+## 平移矩阵
 $$
  \left[
  \begin{matrix}
@@ -57,8 +60,34 @@ $$
 \right]
 $$
 
-***
-# 模型矩阵
+## 缩放矩阵
+$$
+\begin{bmatrix}x'\\\\ y'\\\\ z'\end{bmatrix}
+=
+\begin{bmatrix}s_{x} & 0 & 0\\\\ 0 & s_{y} & 0\\\\ 0 & 0 & s_{z} \end{bmatrix}
+\begin{bmatrix}x\\\\ y\\\\ z\end{bmatrix}
+$$
+
+## 旋转矩阵
+旋转变换有一些复杂，先看在二维平面上的旋转变换：
+很容易得到：
+
+$$\begin{matrix}x'=x\cos\theta-y\sin\theta\\y'=x\sin\theta+y\sin\theta\end{matrix}$$
+
+矩阵形式的表达更加简洁，后面大多使用这种形式：
+
+$$\begin{bmatrix}x'\\ y'\end{bmatrix}=\begin{bmatrix}\cos\theta & -\sin\theta\\ \sin\theta & \cos\theta\end{bmatrix}\begin{bmatrix}x\\ y\end{bmatrix}$$
+点绕z轴旋转：
+
+$$\begin{bmatrix}x'\\ y'\\ z'\end{bmatrix}=\begin{bmatrix}\cos\theta & -\sin\theta & 0\\ \sin\theta & \cos\theta & 0\\ 0 & 0 & 1\end{bmatrix}\begin{bmatrix}x\\ y\\ z\end{bmatrix}$$
+
+点绕x轴旋转：
+
+$$\begin{bmatrix}x'\\ y'\\ z'\end{bmatrix}=\begin{bmatrix}1 & 0 & 0\\ 0 & \cos\theta & -\sin\theta\\ 0 & \sin\theta & \cos\theta\end{bmatrix}\begin{bmatrix}x\\ y\\ z\end{bmatrix}$$
+
+点绕y轴旋转：
+
+$$\begin{bmatrix}x'\\ y'\\ z'\end{bmatrix}=\begin{bmatrix}\cos\theta & 0 & -\sin\theta\\ 0 & 1 & 0\\ \sin\theta & 0 & \cos\theta\end{bmatrix}\begin{bmatrix}x\\ y\\ z\end{bmatrix}$$
 
 ***
 
