@@ -1,0 +1,506 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    
+
+    <title>矩阵的应用 | </title>
+    <meta name="author" content="John Doe">
+    
+    <meta name="description" content="单位矩阵与任何向量相乘都得到原来的向量。$$ \left[ \begin{matrix}   1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 \\   0 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 \\   0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 0 \\   0 &amp;amp; 0 ">
+    
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <meta property="og:title" content="矩阵的应用"/>
+    <meta property="og:site_name" content="Hexo"/>
+
+    
+    <meta property="og:image" content="undefined"/>
+    
+
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="stylesheet" href="/css/lib/materialize.min.css">
+    <link rel="stylesheet" href="/css/lib/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+
+    
+        <link rel="stylesheet" href="/css/lib/prettify-tomorrow-night-eighties.css" type="text/css">
+    
+    <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+
+<body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><img src="/weixin_favicon.png" style="position: absolute; left: -9999px; opacity: 0; filter: alpha(opacity=0);">
+
+    <nav class="indigo">
+    <div class="nav-wrapper">
+        <a href="#" data-activates="main-menu" class="button-collapse">
+            <i class="fa fa-navicon"></i>
+        </a>
+        <div class="">
+            <a href="/" class="brand-logo hide-on-med-and-down">Hexo</a>
+            <ul class="right hide-on-med-and-down">
+                
+                    <li>
+                        <a class="menu-home " href="/" >
+                            <i class="fa fa-home "></i>
+                            
+                            Home
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-archive " href="/archives" >
+                            <i class="fa fa-archive "></i>
+                            
+                            Archives
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-category category-menu" href="javascript:;" data-activates="category-menu" >
+                            <i class="fa fa-bookmark "></i>
+                            
+                            Categories
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-reading " href="/reading" >
+                            <i class="fa fa-book "></i>
+                            
+                            Reading
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-about " href="/about" >
+                            <i class="fa fa-user "></i>
+                            
+                            About
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a class="menu-search modal-trigger " href="#search" >
+                            <i class="fa fa-search "></i>
+                            
+                            Search
+                        </a>
+                    </li>
+                
+            </ul>
+            <div>
+    <ul class="side-nav indigo darken-1" id="main-menu">
+        
+
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-home " href="/" >
+                    <i class="fa fa-home "></i>
+                    
+                    Home
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-archive " href="/archives" >
+                    <i class="fa fa-archive "></i>
+                    
+                    Archives
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-category category-menu" href="javascript:;" data-activates="category-menu" >
+                    <i class="fa fa-bookmark "></i>
+                    
+                    Categories
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-reading " href="/reading" >
+                    <i class="fa fa-book "></i>
+                    
+                    Reading
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-about " href="/about" >
+                    <i class="fa fa-user "></i>
+                    
+                    About
+                </a>
+            </li>
+        
+            <li class="no-padding">
+                <a class="waves-effect menu-search modal-trigger " href="#search" >
+                    <i class="fa fa-search "></i>
+                    
+                    Search
+                </a>
+            </li>
+        
+    </ul>
+
+    <ul class="side-nav indigo darken-1" id="category-menu">
+    
+
+            
+
+            <li class="collapse-level-0" collapse-level="0">
+                <a class="no-padding" href="/categories/OpenGL-ES/">
+                    OpenGL-ES <span class="right">1</span></a>
+                </a>
+            </li>
+
+        
+
+    </ul>
+</div>
+
+        </div>
+    </div>
+</nav>
+
+<div id="search" class="modal search-modal">
+    <div class="row">
+        <div class="input-field col s12">
+              <input id="search-input" type="text">
+              <label for="search-input">Search</label>
+        </div>
+
+    </div>
+    <div id="search-result" class="search-result col s12">
+
+    </div>
+</div>
+
+
+    <main>
+        <div class="container main-container">
+    <nav class="page-nav hide-on-small-only">
+    <div class="nav-wrapper indigo">
+        <span class="breadcrumb">Current page(Categories)</span>
+        
+            
+    
+    
+    <a class="breadcrumb" href="/categories/OpenGL-ES/">OpenGL ES</a>
+
+
+        
+
+        
+    </div>
+</nav>
+
+<article>
+    <div class="card">
+        <div class="card-content">
+            
+
+            <div class="article-title">
+                
+    
+        <h1>矩阵的应用</h1>
+    
+
+
+            </div>
+            <time class="pink-link-context" datetime="2016-11-21T15:22:31.000Z"><a href="/2016/11/21/OpenGLES-matrix-usage/">2016-11-21</a></time>
+
+            
+    <div class="tags-row">
+        
+            <a href="/tags/OpenGL-ES/" class="chip pink lighten-1">OpenGL ES</a>
+        
+    </div>
+
+
+            <div class="toc pink-link-context hide-on-med-and-down">
+    <ol class="section table-of-contents"><li class="section table-of-contents-item section table-of-contents-level-1"><a class="section table-of-contents-link" href="#单位矩阵"><span class="section table-of-contents-text">单位矩阵</span></a></li><li class="section table-of-contents-item section table-of-contents-level-1"><a class="section table-of-contents-link" href="#模型矩阵"><span class="section table-of-contents-text">模型矩阵</span></a><ol class="section table-of-contents-child"><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#平移矩阵"><span class="section table-of-contents-text">平移矩阵</span></a></li><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#缩放矩阵"><span class="section table-of-contents-text">缩放矩阵</span></a></li><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#旋转矩阵"><span class="section table-of-contents-text">旋转矩阵</span></a></li></ol></li><li class="section table-of-contents-item section table-of-contents-level-1"><a class="section table-of-contents-link" href="#视图矩阵"><span class="section table-of-contents-text">视图矩阵</span></a></li><li class="section table-of-contents-item section table-of-contents-level-1"><a class="section table-of-contents-link" href="#投影矩阵"><span class="section table-of-contents-text">投影矩阵</span></a><ol class="section table-of-contents-child"><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#正交投影矩阵"><span class="section table-of-contents-text">正交投影矩阵</span></a></li><li class="section table-of-contents-item section table-of-contents-level-2"><a class="section table-of-contents-link" href="#透视投影矩阵"><span class="section table-of-contents-text">透视投影矩阵</span></a></li></ol></li><li class="section table-of-contents-item section table-of-contents-level-1"><a class="section table-of-contents-link" href="#虚拟世界的顶点画到在屏幕上经过的变换过程"><span class="section table-of-contents-text">虚拟世界的顶点画到在屏幕上经过的变换过程</span></a></li></ol>
+</div>
+
+
+            <div class="entry pink-link-context">
+                <h1 id="单位矩阵"><a href="#单位矩阵" class="headerlink" title="单位矩阵"></a>单位矩阵</h1><p>与任何向量相乘都得到原来的向量。<br>$$<br> \left[<br> \begin{matrix}<br>   1 &amp; 0 &amp; 0 &amp; 0 \\<br>   0 &amp; 1 &amp; 0 &amp; 0 \\<br>   0 &amp; 0 &amp; 1 &amp; 0 \\<br>   0 &amp; 0 &amp; 0 &amp; 1<br>  \end{matrix}<br>  \right]<br>$$</p>
+<hr>
+<h1 id="模型矩阵"><a href="#模型矩阵" class="headerlink" title="模型矩阵"></a>模型矩阵</h1><p>模型矩阵是相对于世界坐标系的，包含一系列平移、缩放、旋转的变换信息的矩阵。它与点的位置没有任何关系。基本的模型矩阵有平移矩阵、缩放矩阵、旋转矩阵，模型矩阵左乘模型矩阵，还是模型矩阵。点坐标左乘模型矩阵就能得到最终变换的坐标。因此，多个顶点能共用同一个模型矩阵，一般一个模型里的所有顶点都共用一个模型矩阵。</p>
+<h2 id="平移矩阵"><a href="#平移矩阵" class="headerlink" title="平移矩阵"></a>平移矩阵</h2><p>$$<br> \left[<br> \begin{matrix}<br>   1 &amp; 0 &amp; 0 &amp; X_t \\<br>   0 &amp; 1 &amp; 0 &amp; Y_t \\<br>   0 &amp; 0 &amp; 1 &amp; Z_t \\<br>   0 &amp; 0 &amp; 0 &amp; 1<br>  \end{matrix}<br>  \right]<br>$$<br>例如：Vec(2,2,0) 沿着X轴平移3，沿着Y轴平移3，则：<br>$$<br>\left[<br>    \begin{matrix}<br>        1 &amp; 0 &amp; 0 &amp; 3 \\<br>        0 &amp; 1 &amp; 0 &amp; 3 \\<br>        0 &amp; 0 &amp; 1 &amp; 0 \\<br>        0 &amp; 0 &amp; 0 &amp; 1<br>    \end{matrix}<br>\right]<br>\left[<br>    \begin{matrix}<br>        2 \\<br>        2 \\<br>        0 \\<br>        1<br>    \end{matrix}<br>\right]<br>=<br>\left[<br>    \begin{matrix}<br>        5 \\<br>        5 \\<br>        0 \\<br>        1<br>    \end{matrix}<br>\right]<br>$$</p>
+<h2 id="缩放矩阵"><a href="#缩放矩阵" class="headerlink" title="缩放矩阵"></a>缩放矩阵</h2><p>$$<br>\begin{bmatrix}<br>    S_x &amp; 0 &amp; 0 &amp; 0 \\<br>    0 &amp; S_y &amp; 0 &amp; 0 \\<br>    0 &amp; 0 &amp; S_z &amp; 0 \\<br>    0 &amp; 0 &amp; 0 &amp; 1<br>\end{bmatrix}<br>$$</p>
+<h2 id="旋转矩阵"><a href="#旋转矩阵" class="headerlink" title="旋转矩阵"></a>旋转矩阵</h2><p>点绕z轴旋转：<br>$$<br>\begin{bmatrix}<br>    \cos\theta &amp; -\sin\theta &amp; 0 &amp; 0 \\<br>    \sin\theta &amp; \cos\theta &amp; 0 &amp; 0 \\<br>    0 &amp; 0 &amp; 1 &amp; 0 \\<br>    0 &amp; 0 &amp; 0 &amp; 1<br>\end{bmatrix}<br>$$</p>
+<p>点绕x轴旋转：<br>$$\begin{bmatrix}<br>    1 &amp; 0 &amp; 0 &amp; 0 \\<br>    0 &amp; \cos\theta &amp; -\sin\theta &amp; 0 \\<br>    0 &amp; \sin\theta &amp; \cos\theta &amp; 0 \\<br>    0 &amp; 0 &amp; 0 &amp; 1<br>\end{bmatrix}$$</p>
+<p>点绕y轴旋转：<br>$$\begin{bmatrix}<br>    \cos\theta &amp; 0 &amp; -\sin\theta &amp; 0\\<br>    0 &amp; 1 &amp; 0 &amp; 0\\<br>    \sin\theta &amp; 0 &amp; \cos\theta &amp; 0 \\<br>    0 &amp; 0 &amp; 0 &amp; 1<br>\end{bmatrix}$$</p>
+<hr>
+<h1 id="视图矩阵"><a href="#视图矩阵" class="headerlink" title="视图矩阵"></a>视图矩阵</h1><p>概念：视图矩阵是本地坐标系在世界坐标系中的变换的模型矩阵的逆矩阵，因此视图矩阵也是可以分为平移、缩放、旋转的。<br>好吧，说点人话，一个摄像机，在世界坐标系中，经过模型矩阵<em>M1</em>（模型变换），从原点沿着X轴正方向前进10单位。这时候，摄像机的视图矩阵为<em>M2</em>，而且<em>M2</em>是<em>M1</em>的逆矩阵。<em>M2</em>的几何含义：假设摄像机一直原地不动，而是这个世界以<em>M2</em>为模型矩阵进行变换，往后移动了10个单位，也就是摄像机在世界坐标系下的平移、缩放、旋转等变换的反向过程。<br>作用：获得相对坐标（本地坐标）。<br>将视图矩阵左乘一个物体最终的模型矩阵，得到的矩阵就是所谓的“模型视图矩阵”。“模型视图矩阵”左乘一个世界坐标系下的坐标点，得到的是相对于本地坐标系的坐标点。<br>举个例子：一个摄像机和一个物体，一起同样的速度和方向，从世界坐标系的原点沿着X轴的正方形移动了10个单位。摄像机的视图矩阵左乘物体的模型矩阵（模型视图矩阵）表示的含义可以理解为：世界往X轴的负方向移动了10个单位，然后在沿x轴正方向移动10个单位，因此任何一个坐标点乘以这个模型视图矩阵，都不会发生变化，明显，摄像机和物体相对静止的。</p>
+<hr>
+<h1 id="投影矩阵"><a href="#投影矩阵" class="headerlink" title="投影矩阵"></a>投影矩阵</h1><p>投影矩阵就是把三维空间投影到二维的空间。方式有正交和透视两种。</p>
+<h2 id="正交投影矩阵"><a href="#正交投影矩阵" class="headerlink" title="正交投影矩阵"></a>正交投影矩阵</h2><ul>
+<li>作用：正交投影矩阵可以把虚拟坐标转换回归一化设备坐标（正交投影矩阵乘以虚拟坐标）。</li>
+<li>归一化设备坐标：在OpenGL里，一切物体都要映射到X、Y轴和Z轴的[-1,1]范围内，这个范围内的坐标被称为归一化设备坐标，其独立于屏幕实际的尺寸。归一化设备坐标假定坐标空间是个正方形。</li>
+<li>虚拟坐标空间：为了让屏幕形状考虑进来，把宽和高中较小的一个的范围定在[-1,1]内，另外一个根据屏幕尺寸比例调整为较大的范围。</li>
+</ul>
+<p>正交投影矩阵如下：<br>$$<br> \left[<br> \begin{matrix}<br>   \frac{2}{right-left} &amp; 0 &amp; 0 &amp; -\frac{right+left}{right-left} \\<br>   0 &amp; \frac{2}{top-bottom} &amp; 0 &amp; -\frac{top+bottom}{top-bottom} \\<br>   0 &amp; 0 &amp;  -\frac{2}{far-near} &amp; -\frac{far+near}{far-near} \\<br>   0 &amp; 0 &amp; 0 &amp; 1<br>  \end{matrix}<br>  \right]<br>$$<br>注意：使用的是左手坐标系还是右手坐标系，这两者的Z轴是相反的。<br>其实在一个顶点着色器的顶点位置(gl_Position)变为归一化设备坐标前，还会做透视除法（xyz都除以w）。</p>
+<h2 id="透视投影矩阵"><a href="#透视投影矩阵" class="headerlink" title="透视投影矩阵"></a>透视投影矩阵</h2><p>透视投影矩阵最大的作用是产生正确的w值。w值可以理解为距离，w值越大，离中心点越近。</p>
+<p>透视投影矩阵<br>$$<br> \left[<br> \begin{matrix}<br>   \frac{α}{width/height} &amp; 0 &amp; 0 &amp; 0 \\<br>   0 &amp; α &amp; 0 &amp; 0 \\<br>   0 &amp; 0 &amp; -\frac{far+near}{far-near} &amp; -\frac{2*far*near}{far-near} \\<br>   0 &amp; 0 &amp; -1 &amp; 0<br>  \end{matrix}<br>  \right]<br>$$<br>其中α是焦距:<br>$$α = \frac {1} {tan(FOV/2)}$$<br>FOV是相机的垂直视角，而不是水平视角<br>width:屏幕宽度<br>height:屏幕高度<br>far: 到远处平面的距离（&gt;0 &amp;&amp; &gt; near）<br>near: 到近处平面的距离（&gt;0）</p>
+<hr>
+<h1 id="虚拟世界的顶点画到在屏幕上经过的变换过程"><a href="#虚拟世界的顶点画到在屏幕上经过的变换过程" class="headerlink" title="虚拟世界的顶点画到在屏幕上经过的变换过程"></a>虚拟世界的顶点画到在屏幕上经过的变换过程</h1><p>变换后的坐标 = 视口矩阵 x 投影矩阵 x 视图矩阵 x 模型矩阵 x 模型点坐标</p>
+
+            </div>
+        </div>
+    </div>
+</article>
+
+
+
+
+
+
+</div>
+
+        <div class="fixed-action-btn float-sitemap">
+    <a class="btn-floating btn-large pink">
+      <i class="fa fa-caret-square-o-up"></i>
+    </a>
+    <ul>
+      <li><a class="btn-return-top btn-floating waves-effect green" title="Return to top"><i class="fa fa-arrow-circle-o-up"></i></a></li>
+      <li><a class="btn-floating waves-effect button-collapse yellow darken-1"  data-activates="main-menu" title="menu"><i class="fa fa-navicon"></i></a></li>
+    </ul>
+  </div>
+
+    </main>
+    <footer class="page-footer indigo darken-1">
+    
+
+    <div class="footer-copyright pink-link-context">
+        <div class="container">
+            © 2016 example.com, All rights reserved.
+            <p class="right" style="margin-top: 0;">Blog powered by <a href="https://hexo.io">Hexo</a> | Theme <a href="https://github.com/raytaylorlin/hexo-theme-raytaylorism">raytaylorism</a></p>
+        </div>
+    </div>
+</footer>
+
+
+    <noscript>
+    <div class="noscript">
+        <p class="center-align">当前网速较慢或者你使用的浏览器不支持博客特定功能，请尝试刷新或换用Chrome、Firefox等现代浏览器</p>
+    </div>
+</noscript>
+<div class="noscript">
+    <p class="center-align">当前网速较慢或者你使用的浏览器不支持博客特定功能，请尝试刷新或换用Chrome、Firefox等现代浏览器</p>
+</div>
+
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/materialize.min.js"></script>
+
+<script>
+    (function($) {
+        $(document).ready(function() {
+            // 隐藏禁用javascript（针对微信内置浏览器）的提示
+            $('.noscript').hide();
+
+            // 图片缩放效果
+            var $imgs = $('img').not('.slider-image').not('.avatar-image').not('.carousel-image').not('.card-cover-image').not('.qrcode');
+
+            // 给图片加上点击放大效果（materialbox插件）
+            $imgs.addClass('materialboxed').each(function(i, el) {
+                $(this).attr('data-caption', $(this).attr('alt') || ' ');
+            }).materialbox();
+
+            // 优化表格的显示
+            $('table').each(function() {
+                var $table = $(this);
+                // 除去多行代码的情况
+                if ($table.find('pre').length == 0) {
+                    $table.addClass('responsive-table striped bordered');
+                }
+            });
+
+            // 首页幻灯片
+            $('.slider').slider({indicators: true, full_width: true, interval: 8000});
+
+            $(".button-collapse").sideNav();
+            $(".category-menu").sideNav();
+
+            // 针对gallery post
+            $('.carousel').carousel({full_width: true});
+            $('.carousel-control.prev').click(function() {
+                $('.carousel').carousel('prev');
+            });
+            $('.carousel-control.next').click(function() {
+                $('.carousel').carousel('next');
+            });
+
+            // 文章目录
+            $('article').not('.simple-article').find('h1').add('h2').add('h3').add('h4').add('h5').add('h6').scrollSpy();
+            // 修正文章目录的left-border颜色
+            var color = $('.table-of-contents-text').css('color');
+            $('.table-of-contents-link').css('border-left-color', color);
+
+            // 针对移动端做的优化：FAB按钮点击一下收回
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                $('.fixed-action-btn').addClass('click-to-toggle');
+            }
+            // 回到顶部
+            $('.btn-return-top').click(function() {
+                $('body, html').animate({
+                    scrollTop: 0
+                }, 500);
+            });
+
+            // 重置读书页面的Tab标签页的颜色
+            $('li.tab a').hover(function() {
+                $(this).toggleClass('text-lighten-4');
+            });
+            $('.indicator').addClass('pink lighten-2');
+
+            
+
+            // 搜索功能
+            $('.modal-trigger').leanModal({
+                // 打开搜索框时自动聚焦
+                ready: function() {
+                    if ($('#search').is(":visible")) {
+                        $('#search-input').focus();
+                    }
+                }
+            });
+            var searchXml = "";
+            if (searchXml.length == 0) {
+             	searchXml = "search.xml";
+            }
+            var searchPath = "/" + searchXml;
+            initSearch(searchPath, 'search-input', 'search-result');
+        });
+
+        // 初始化搜索与匹配函数
+        var initSearch = function(path, search_id, content_id) {
+            'use strict';
+            $.ajax({
+                url: path,
+                dataType: "xml",
+                success: function(xmlResponse) {
+                    // get the contents from search data
+                    var datas = $("entry", xmlResponse).map(function() {
+                        return {
+                            title: $("title", this).text(),
+                            content: $("content", this).text(),
+                            url: $("url", this).text()
+                        };
+                    }).get();
+                    var $input = document.getElementById(search_id);
+                    var $resultContent = document.getElementById(content_id);
+                    $input.addEventListener('input', function() {
+                        var str = '<ul class=\"search-result-list\">';
+                        var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                        $resultContent.innerHTML = "";
+                        if (this.value.trim().length <= 0) {
+                            return;
+                        }
+                        // perform local searching
+                        datas.forEach(function(data) {
+                            var isMatch = true;
+                            var content_index = [];
+                            var data_title = data.title.trim().toLowerCase();
+                            var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                            var data_url = data.url;
+                            var index_title = -1;
+                            var index_content = -1;
+                            var first_occur = -1;
+                            // only match artiles with not empty titles and contents
+                            if (data_title != '' && data_content != '') {
+                                keywords.forEach(function(keyword, i) {
+                                    index_title = data_title.indexOf(keyword);
+                                    index_content = data_content.indexOf(keyword);
+                                    if (index_title < 0 && index_content < 0) {
+                                        isMatch = false;
+                                    } else {
+                                        if (index_content < 0) {
+                                            index_content = 0;
+                                        }
+                                        if (i == 0) {
+                                            first_occur = index_content;
+                                        }
+                                    }
+                                });
+                            }
+                            // show search results
+                            if (isMatch) {
+                                keywords.forEach(function(keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    data_title = data_title.replace(regS, "<span class=\"search-keyword pink lighten-2\">" + keyword + "</span>");
+                                });
+
+                                str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                                var content = data.content.trim().replace(/<[^>]+>/g, "");
+                                if (first_occur >= 0) {
+                                    // cut out 100 characters
+                                    var start = first_occur - 20;
+                                    var end = first_occur + 80;
+                                    if (start < 0) {
+                                        start = 0;
+                                    }
+                                    if (start == 0) {
+                                        end = 100;
+                                    }
+                                    if (end > content.length) {
+                                        end = content.length;
+                                    }
+                                    var match_content = content.substring(start, end);
+                                    // highlight all keywords
+                                    keywords.forEach(function(keyword) {
+                                        var regS = new RegExp(keyword, "gi");
+                                        match_content = match_content.replace(regS, "<span class=\"search-keyword pink lighten-2\">" + keyword + "</span>");
+                                    });
+
+                                    str += "<p class=\"search-result\">..." + match_content + "...</p>"
+                                }
+                                str += "</li>";
+                            }
+                        });
+                        str += "</ul>";
+                        $resultContent.innerHTML = str;
+                    });
+                }
+            });
+        }
+    })(jQuery);
+</script>
+
+
+<script src="/js/prettify.js"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("pre").addClass("prettyprint");
+        prettyPrint();
+    });
+</script>
+
+
+
+
+
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}
+});
+</script>
+<script type="text/javascript" async
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML">
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+
+
+</body>
+</html>

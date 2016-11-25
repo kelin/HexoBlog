@@ -3,11 +3,11 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
-subtitle:
-description:
-author: John Doe
-language:
+title: Kelin's blog
+subtitle: Kelin's blog
+description: Kelin
+author: Kelin Chen
+language: zh-CN
 timezone:
 
 # URL
@@ -67,10 +67,12 @@ per_page: 10
 pagination_dir: page
 
 
+mathjax: true
+
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: raytaylorism #landscape
+theme: BlueLake #raytaylorism #landscape
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
