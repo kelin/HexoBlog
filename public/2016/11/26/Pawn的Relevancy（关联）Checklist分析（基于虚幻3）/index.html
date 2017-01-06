@@ -1,0 +1,486 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  
+    <title>Pawn的Relevancy（关联）Checklist分析（基于虚幻3） | Kelin&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Kelin Chen">
+    
+
+    
+    <meta name="description" content="在项目开发中，我发现了游戏中有一个bug。怪物会无端端消失，移动一下玩家角色，怪物又会重新出现。特别是在玩家角色前面有遮挡物的时候，很容易重现。不难猜想，就是虚幻的关联导致的这个现象，因此唯有对Pawn的关联的检查流程仔细分析。追根溯源，最后终于定位到了如下函数：
+
+这个函数具体实现如下：1234567891011121314151617181920212223242526272829303132">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pawn的Relevancy（关联）Checklist分析（基于虚幻3）">
+<meta property="og:url" content="http://yoursite.com/2016/11/26/Pawn的Relevancy（关联）Checklist分析（基于虚幻3）/index.html">
+<meta property="og:site_name" content="Kelin's blog">
+<meta property="og:description" content="在项目开发中，我发现了游戏中有一个bug。怪物会无端端消失，移动一下玩家角色，怪物又会重新出现。特别是在玩家角色前面有遮挡物的时候，很容易重现。不难猜想，就是虚幻的关联导致的这个现象，因此唯有对Pawn的关联的检查流程仔细分析。追根溯源，最后终于定位到了如下函数：
+
+这个函数具体实现如下：1234567891011121314151617181920212223242526272829303132">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/3713845-7cd88fe288a20426.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2016-11-26T12:34:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Pawn的Relevancy（关联）Checklist分析（基于虚幻3）">
+<meta name="twitter:description" content="在项目开发中，我发现了游戏中有一个bug。怪物会无端端消失，移动一下玩家角色，怪物又会重新出现。特别是在玩家角色前面有遮挡物的时候，很容易重现。不难猜想，就是虚幻的关联导致的这个现象，因此唯有对Pawn的关联的检查流程仔细分析。追根溯源，最后终于定位到了如下函数：
+
+这个函数具体实现如下：1234567891011121314151617181920212223242526272829303132">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/3713845-7cd88fe288a20426.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Kelin&#39;s blog" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/favicon.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/jacman.jpg">
+    <link rel="apple-touch-icon-precomposed" href="/img/jacman.jpg">
+    
+    <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+  <body>
+    <!-- hexo-inject:begin --><!-- hexo-inject:end --><header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/logo.png" alt="Kelin&#39;s blog" title="Kelin&#39;s blog"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Kelin&#39;s blog">Kelin&#39;s blog</a></h1>
+				<h2 class="blog-motto">纯粹的菜鸟笔记</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/about">About</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:yoursite.com">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2016/11/26/Pawn的Relevancy（关联）Checklist分析（基于虚幻3）/" title="Pawn的Relevancy（关联）Checklist分析（基于虚幻3）" itemprop="url">Pawn的Relevancy（关联）Checklist分析（基于虚幻3）</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Kelin Chen" target="_blank" itemprop="author">Kelin Chen</a>
+		
+  <p class="article-time">
+    <time datetime="2016-11-26T09:41:10.000Z" itemprop="datePublished"> 发表于 2016-11-26</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			
+		
+		</div>
+		
+		<p>在项目开发中，我发现了游戏中有一个bug。怪物会无端端消失，移动一下玩家角色，怪物又会重新出现。特别是在玩家角色前面有遮挡物的时候，很容易重现。不难猜想，就是虚幻的关联导致的这个现象，因此唯有对Pawn的关联的检查流程仔细分析。<br>追根溯源，最后终于定位到了如下函数：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/3713845-7cd88fe288a20426.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Pawn的关联判断函数.png"></p>
+<p>这个函数具体实现如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">UBOOL APawn ::IsNetRelevantFor( APlayerController* RealViewer, AActor * Viewer, const FVector &amp; SrcLocation)</div><div class="line">&#123;</div><div class="line">     if ( bAlwaysRelevant )</div><div class="line">          return TRUE ;</div><div class="line">     if ( (NetRelevancyTime == GWorld-&gt;GetTimeSeconds ()) &amp;&amp; (RealViewer == LastRealViewer) &amp;&amp; (Viewer == LastViewer) )</div><div class="line">    &#123;</div><div class="line">          return bCachedRelevant ;</div><div class="line">    &#125;</div><div class="line">     if( IsOwnedBy (Viewer) || IsOwnedBy(RealViewer ) || this==Viewer || Viewer== Instigator</div><div class="line">         || IsBasedOn(Viewer ) || (Viewer &amp;&amp; Viewer-&gt;IsBasedOn (this)) || RealViewer-&gt;bReplicateAllPawns</div><div class="line">         || ( Controller &amp;&amp; ((Location - Viewer-&gt;Location ).SizeSquared() &lt; AlwaysRelevantDistanceSquared )) || HasAudibleAmbientSound(SrcLocation ) )</div><div class="line">          return CacheNetRelevancy(TRUE ,RealViewer, Viewer);</div><div class="line">     else if ( (bHidden || bOnlyOwnerSee) &amp;&amp; !bBlockActors )</div><div class="line">          return CacheNetRelevancy(FALSE ,RealViewer, Viewer);</div><div class="line">     else if ( Base &amp;&amp; ( BaseSkelComponent || ((Base == Owner) &amp;&amp; !bOnlyOwnerSee )) )</div><div class="line">          return Base -&gt;IsNetRelevantFor( RealViewer, Viewer, SrcLocation );</div><div class="line">     else</div><div class="line">    &#123;</div><div class="line">#ifdef USE_DISTANCE_FOG_OCCLUSION</div><div class="line">          // check distance fog</div><div class="line">          if ( RealViewer-&gt;BeyondFogDistance (SrcLocation, Location) )</div><div class="line">              return CacheNetRelevancy(false ,RealViewer, Viewer);</div><div class="line">#endif</div><div class="line">          // check against BSP - check head and center</div><div class="line">          //debugf(TEXT(&quot;Check relevance of %s&quot;),*(PlayerReplicationInfo-&gt;PlayerName));</div><div class="line">          FCheckResult Hit (1.f);</div><div class="line">          if ( !GWorld -&gt;SingleLineCheck( Hit, this , Location + FVector (0.f,0.f,BaseEyeHeight), SrcLocation, TRACE_World|TRACE_StopAtAnyHit |TRACE_ComplexCollision, FVector(0.f,0.f,0.f) )</div><div class="line">             &amp;&amp; ! GWorld-&gt;SingleLineCheck ( Hit, this, Location, SrcLocation , TRACE_World|TRACE_StopAtAnyHit |TRACE_ComplexCollision, FVector(0.f,0.f,0.f) )</div><div class="line">             &amp;&amp; !IsRelevantThroughPortals (RealViewer) )</div><div class="line">         &#123;</div><div class="line">              return CacheNetRelevancy(FALSE ,RealViewer, Viewer);</div><div class="line">         &#125;</div><div class="line">          return CacheNetRelevancy(TRUE ,RealViewer, Viewer);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到，Pawn的关联判断流程：<br>1、先判断是否是bAlwaysRelevant，如果是，则直接返回true<br>2、判断是否已经检查过了，是则直接返回上一次检查结果<br>3、判断以下条件，有一个成立则认为是关联：<br>           是否被Viewer拥有，<br>           是否被RealViewer拥有，是否viewer就是自己本身，<br>           viewer是否是本身的Instigator（注意，Instigator 和 owner不要混淆了哦），<br>           是否base on viewer或者是viewer base on自己，<br>           是否RealViewer的bReplicateAllPawns为true，<br>           自己和viewer是否在一定会关联的距离内，<br>           是否会听到目标位置的声音<br>4、判断 ( (bHidden || bOnlyOwnerSee) &amp;&amp; !bBlockActors )，不能被碰撞，而且被隐藏了或者自由owner能看见。<br>5、判断是否有base，有的话检查base是否是关联的，如果base是关联，则这个pawn也是关联的。<br>6、以下条件任何一个成立，则返回不关联<br>            通过线性检测，检测到这个Pawn的眼睛的位置和SrcLocation之间有遮挡（SrcLocation 可以理解为Viewer的location，当然为了更好的体验感，其实还增加了预判，具体的实现在FNetViewer::FNetViewer()函数中）；<br>            这个Pawn的位置和SrcLocation之间有遮挡；<br>            不能通过某个房间的入口看得到RealViewer（通过遍历检查RealViewer::VisiblePortals的成员实现。TickSpecial()会不断调用CheckPortalVisible()更新Controller中的VisiblePortals）；</p>
+<p>问题就出在第6个条件那里。<br>这个Pawn就是要判断是否关联的怪物，而第六个条件只是判断了：怪物的眼睛到玩家的位置做射线检测、怪物的位置到玩家的位置做射线检测 ，但是，玩家的眼睛的位置到怪物的位置这个射线检测没有判断，因此如果怪物检测不到玩家，而玩家却刚好能看得到怪物的时候，就会出现这个怪物不关联的bug了。<br>知道问题，改起来也简单，增加一个射线检测就行了。上面的函数改为下面这样，就OK了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">UBOOL APawn :: IsNetRelevantFor( APlayerController * RealViewer , AActor * Viewer, const FVector &amp; SrcLocation )</div><div class="line">&#123;</div><div class="line">     if ( bAlwaysRelevant )</div><div class="line">          return TRUE ;</div><div class="line">     if ( (NetRelevancyTime == GWorld -&gt;GetTimeSeconds ()) &amp;&amp; ( RealViewer == LastRealViewer ) &amp;&amp; (Viewer == LastViewer) )</div><div class="line">    &#123;</div><div class="line">          return bCachedRelevant ;</div><div class="line">    &#125;</div><div class="line">     if ( IsOwnedBy ( Viewer) || IsOwnedBy (RealViewer ) || this ==Viewer || Viewer== Instigator</div><div class="line">         || IsBasedOn (Viewer ) || ( Viewer &amp;&amp; Viewer -&gt;IsBasedOn ( this)) || RealViewer -&gt;bReplicateAllPawns</div><div class="line"></div><div class="line">         || ( Controller &amp;&amp; ((Location - Viewer -&gt;Location ). SizeSquared() &lt; AlwaysRelevantDistanceSquared )) || HasAudibleAmbientSound (SrcLocation ) )</div><div class="line">          return CacheNetRelevancy (TRUE , RealViewer, Viewer );</div><div class="line">     else if ( ( bHidden || bOnlyOwnerSee ) &amp;&amp; !bBlockActors )</div><div class="line">          return CacheNetRelevancy (FALSE , RealViewer, Viewer );</div><div class="line">     else if ( Base &amp;&amp; ( BaseSkelComponent || ((Base == Owner ) &amp;&amp; !bOnlyOwnerSee )) )</div><div class="line">          return Base -&gt; IsNetRelevantFor( RealViewer , Viewer , SrcLocation );</div><div class="line">     else</div><div class="line">    &#123;</div><div class="line">#ifdef USE_DISTANCE_FOG_OCCLUSION</div><div class="line">          // check distance fog</div><div class="line">          if ( RealViewer -&gt;BeyondFogDistance ( SrcLocation, Location ) )</div><div class="line">              return CacheNetRelevancy (false , RealViewer, Viewer );</div><div class="line">#endif</div><div class="line">          // check against BSP - check head and center</div><div class="line">          //debugf(TEXT(&quot;Check relevance of %s&quot;),*(PlayerReplicationInfo-&gt;PlayerName));</div><div class="line">          FCheckResult Hit (1.f);</div><div class="line">          if ( !GWorld -&gt; SingleLineCheck( Hit , this , Location + FVector (0.f,0.f, BaseEyeHeight), SrcLocation , TRACE_World |TRACE_StopAtAnyHit | TRACE_ComplexCollision, FVector (0.f,0.f,0.f) )</div><div class="line">             &amp;&amp; ! GWorld -&gt;SingleLineCheck ( Hit, this , Location , SrcLocation , TRACE_World |TRACE_StopAtAnyHit | TRACE_ComplexCollision, FVector (0.f,0.f,0.f) )</div><div class="line">              &amp;&amp; !IsRelevantThroughPortals ( RealViewer) )</div><div class="line">         &#123;</div><div class="line">              UBOOL RealViewerCanSeeThis = TRUE;</div><div class="line">              APawn * RealViewerPawn = RealViewer -&gt;Pawn ;</div><div class="line">              if (NULL != RealViewerPawn)</div><div class="line">             &#123;</div><div class="line">                  RealViewerCanSeeThis = GWorld -&gt;SingleLineCheck ( Hit, this , RealViewerPawn -&gt;Location + FVector (0.f,0.f,RealViewerPawn -&gt; BaseEyeHeight), Location , TRACE_World |TRACE_StopAtAnyHit | TRACE_ComplexCollision, FVector (0.f,0.f,0.f));</div><div class="line">             &#125;</div><div class="line">              if (RealViewerCanSeeThis )</div><div class="line">                  return CacheNetRelevancy (TRUE , RealViewer, Viewer );</div><div class="line">              else</div><div class="line">                  return CacheNetRelevancy (FALSE , RealViewer, Viewer );</div><div class="line">         &#125;</div><div class="line">          return CacheNetRelevancy (TRUE , RealViewer, Viewer );</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/虚幻3/">虚幻3</a>
+</div>
+
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="http://yoursite.com/2016/11/26/Pawn的Relevancy（关联）Checklist分析（基于虚幻3）/" data-title="Pawn的Relevancy（关联）Checklist分析（基于虚幻3） | Kelin&#39;s blog" data-tsina="null" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+ <div class="prev" >
+ <a href="/2016/12/08/行为树基础/" title="行为树基础">
+  <strong>上一篇：</strong><br/>
+  <span>
+  行为树基础</span>
+</a>
+</div>
+
+
+<div class="next">
+<a href="/2016/11/26/SeqEvent-Touch实现原理概要/"  title="SeqEvent_Touch实现原理概要">
+ <strong>下一篇：</strong><br/> 
+ <span>SeqEvent_Touch实现原理概要
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ 
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Behavior-Tree/" title="Behavior Tree">Behavior Tree<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/OpenGL-ES/" title="OpenGL ES">OpenGL ES<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/虚幻3/" title="虚幻3">虚幻3<sup>3</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/OpenGL-ES/" title="OpenGL ES">OpenGL ES<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello, I&#39;m Kelin. This is my notes. <br/>
+			The faintest ink is better than the best memory.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/2176287895" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Kelin Chen">Kelin Chen</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?e6d1f421bbc9962127a50488f9ed37d1";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+
+  </body>
+</html>
