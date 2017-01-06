@@ -10,7 +10,6 @@ mathjax: true
 ## 模型矩阵
 模型矩阵是相对于世界坐标系的，包含一系列平移、缩放、旋转的变换信息的矩阵。它与点的位置没有任何关系。基本的模型矩阵有平移矩阵、缩放矩阵、旋转矩阵，模型矩阵左乘模型矩阵，还是模型矩阵。点坐标左乘模型矩阵就能得到最终变换的坐标。因此，多个顶点能共用同一个模型矩阵，一般一个模型里的所有顶点都共用一个模型矩阵。
 ### 平移矩阵
-
 $$
  \left[
  \begin{matrix}
@@ -21,9 +20,7 @@ $$
   \end{matrix}
   \right]
 $$
-
 例如：Vec(2,2,0) 沿着X轴平移3，沿着Y轴平移3，则：
-
 $$
 \left[
     \begin{matrix}
@@ -52,8 +49,7 @@ $$
 \right]
 $$
 
-### 缩放矩阵
-
+###缩放矩阵
 $$
 \begin{bmatrix}
     S_x & 0 & 0 & 0 \\\\
@@ -66,7 +62,6 @@ $$
 ### 旋转矩阵
 #### 点绕z轴旋转：
 （左手坐标系，其中θ是Yaw角）：
-
 $$
 \begin{bmatrix}
     \cos\theta & \sin\theta & 0 & 0 \\\\
@@ -75,9 +70,7 @@ $$
     0 & 0 & 0 & 1
 \end{bmatrix}
 $$
-
 （右手坐标系，其中θ是Yaw角）：
-
 $$
 \begin{bmatrix}
     \cos\theta & -\sin\theta & 0 & 0 \\\\
@@ -89,16 +82,13 @@ $$
 
 #### 点绕x轴旋转：
 （左手坐标系，其中θ是roll角）：
-
 $$\begin{bmatrix}
     1 & 0 & 0 & 0 \\\\ 
     0 & \cos\theta & \sin\theta & 0 \\\\ 
     0 & -\sin\theta & \cos\theta & 0 \\\\
     0 & 0 & 0 & 1
 \end{bmatrix}$$
-
 （右手坐标系，其中θ是roll角）：
-
 $$\begin{bmatrix}
     1 & 0 & 0 & 0 \\\\ 
     0 & \cos\theta & -\sin\theta & 0 \\\\ 
@@ -108,7 +98,6 @@ $$\begin{bmatrix}
 
 #### 点绕y轴旋转
 （左手坐标系，其中θ是pitch角）：
-
 $$\begin{bmatrix}
     \cos\theta & 0 & -\sin\theta & 0\\\\
     0 & 1 & 0 & 0\\\\
@@ -116,7 +105,6 @@ $$\begin{bmatrix}
     0 & 0 & 0 & 1
 \end{bmatrix}$$
 （右手坐标系，其中θ是pitch角）
-
 $$\begin{bmatrix}
     \cos\theta & 0 & \sin\theta & 0\\\\
     0 & 1 & 0 & 0\\\\
@@ -142,7 +130,6 @@ $$\begin{bmatrix}
 - 虚拟坐标空间：为了让屏幕形状考虑进来，把宽和高中较小的一个的范围定在[-1,1]内，另外一个根据屏幕尺寸比例调整为较大的范围。
 
 正交投影矩阵如下：
-
 $$
  \left[
  \begin{matrix}
@@ -153,7 +140,6 @@ $$
   \end{matrix}
   \right]
 $$
-
 注意：使用的是左手坐标系还是右手坐标系，这两者的Z轴是相反的。
 其实在一个顶点着色器的顶点位置(gl_Position)变为归一化设备坐标前，还会做透视除法（xyz都除以w）。
 
@@ -161,18 +147,16 @@ $$
 透视投影矩阵最大的作用是产生正确的w值。w值可以理解为距离，w值越大，离中心点越近。
 
 透视投影矩阵
-
 $$
  \left[
  \begin{matrix}
    \frac{α}{width/height} & 0 & 0 & 0 \\\\
    0 & α & 0 & 0 \\\\
-   0 & 0 & -\frac{far+near}{far-near} & -\frac{2\*far\*near}{far-near} \\\\
+   0 & 0 & -\frac{far+near}{far-near} & -\frac{2*far*near}{far-near} \\\\
    0 & 0 & -1 & 0
   \end{matrix}
   \right]
 $$
-
 其中α是焦距:
 $$α = \frac {1} {tan(FOV/2)}$$
 FOV是相机的垂直视角，而不是水平视角
